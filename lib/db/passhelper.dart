@@ -1,89 +1,47 @@
-import 'package:pass_locker/object/pword.dart';
-import 'package:path/path.dart';
-import 'package:sqflite/sqflite.dart';
+// ignore_for_file: constant_identifier_names, file_names
 
-const String col_id = 'id';
-const String col_user = 'username';
-const String col_pass = 'password';
-const String col_site = 'site';
-const String col_timestamp = 'timestamp';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:vaultify/object/vault.dart';
 
-class Passheper {
+import '../constant/functions.dart';
+import '../service/authHelper.dart';
 
-  Passheper._const();
-  static final Passheper instance = Passheper._const();
+class VaultHelper {
 
-  static Database? _database;
-  Future<Database> get database async => _database ??= await _initDatabase();
+  static CollectionReference<Map<String, dynamic>> colvlt = FirebaseFirestore
+      .instance
+      .collection('/users/${AuthHelper.myuser!.uid}/vault');
 
-  static const int    ver = 1;
-  static const String dbname = 'pass_word.db';
-  static const String table = 'passtable';
-
-
-  Future<Database> _initDatabase() async {
-    final databasePath = await getDatabasesPath();
-    String path = join(databasePath, dbname);
-    return await openDatabase(path, onCreate: _onCreate, version: ver);
-  }
-
-  Future<void> _onCreate(Database db, int version) async {
-    await db.execute(
-        ''' 
-       CREATE TABLE $table
-       (
-           $col_id INTEGER PRIMARY KEY,
-           $col_user TEXT,
-           $col_pass TEXT,
-           $col_site TEXT,
-           $col_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-       )
-       '''
+  Stream<List<Vault>> getvaults() {
+    Stream<QuerySnapshot<Map<String, dynamic>>> snapshots =
+    colvlt.orderBy('id').snapshots();
+    Stream<List<Vault>> data = snapshots.map(
+          (snapshot) => snapshot.docs
+          .map((snapshot) => Vault.fromMap(snapshot.data()))
+          .toList(),
     );
+    return data;
   }
 
-  Future<List<Pword>> getList() async {
-    Database db = await instance.database;
-    var data = await db.query(table, /*orderBy: col_timestamp*/);
-    List<Pword> pList = data.isNotEmpty ? data.map((c) => Pword.fromMap(c)).toList() : [];
-    return pList;
+  Stream<Vault> getvault(String id) {
+    DocumentReference<Map<String, dynamic>> docrefer = colvlt.doc(id);
+    return docrefer.snapshots().map((data) => Vault.fromMap(data.data()!));
   }
 
-  Future<int> add(Pword pword) async {
-    Database db = await instance.database;
-    return await db.insert(table, pword.toMap());
+  Future<void> addvault(Vault vault) async {
+    vault.id = timenow;
+    DocumentReference<Map<String, dynamic>> docrefer = colvlt.doc(vault.id);
+    await docrefer.set(vault.toMap());
   }
 
-  Future<int> remove(int id) async {
-    Database db = await instance.database;
-    return await db.delete(table, where: '$col_id = ?', whereArgs: [id]);
+  Future<void> editvault(Vault vault) async {
+    DocumentReference<Map<String, dynamic>> docrefer = colvlt.doc(vault.id);
+    await docrefer.update(vault.toMap());
   }
 
-  Future<int> update(Pword pword) async {
-    Database db = await instance.database;
-    return await db.update(table, pword.toMap(), where: "$col_id = ?", whereArgs: [pword.id]);
+  Future<void> delvault(String id) async {
+    DocumentReference<Map<String, dynamic>> docrefer = colvlt.doc(id);
+    await docrefer.delete();
   }
-
-  Future<int> uppass(int id,String pass) async {
-    Database db = await instance.database;
-    return await db.update(
-        table,
-        {col_pass : pass},
-        where: "$col_id = ?",
-        whereArgs: [id]
-    );
-  }
-
-  /*Future<List<e>> getcuslist(int indx) async {
-    Database db = await instance.database;
-    var casfers = await db.query(table, orderBy: col_e);
-    List<e> data = casfers.isNotEmpty ? casfers.map((c) => e0.fromMap(c)).toList() : [];
-    List<e> elist = [];
-    data.forEach((element) {
-      if(element.indx == indx)
-        e1list.add(element);
-    });
-    return e2list;
-  }*/
 
 }

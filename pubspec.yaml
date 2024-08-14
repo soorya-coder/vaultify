@@ -24,8 +24,8 @@ dependencies:
   flutter_slidable: any
   google_nav_bar: any
   avatar_glow: any
-  progress_indicators: any
   url_launcher: any
+  package_info_plus: any
 
   iconly: any
   flutter_screenutil: any

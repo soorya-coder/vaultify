@@ -1,322 +1,127 @@
-import 'dart:io';
-import 'package:flutter/cupertino.dart';
+// ignore_for_file: library_private_types_in_public_api, deprecated_member_use
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
+import '../constant/color.dart';
+import '../constant/functions.dart';
 import '../constant/widget.dart';
-import '../main.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import '../service/authHelper.dart';
 
-class _mainlogState extends State<mainlog> {
-
-  List<Widget> page = [const firstpage(),const secondpage()];
+class _LoginState extends State<Login> {
+  TextEditingController emailcon = TextEditingController();
+  TextEditingController passcon = TextEditingController();
+  AuthHelper authHelper =AuthHelper();
 
   @override
   Widget build(BuildContext context) {
+    //final Size size = MediaQuery.of(context).size;
     return WillPopScope(
-      onWillPop: () async {
+      onWillPop: () async{
         SystemNavigator.pop();
-        return true;
+        return false;
       },
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Attendents App'),
-          centerTitle: true,
-          elevation: 1,
-          backgroundColor: Colors.red.withOpacity(0.55),
-        ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(
-                height: 300,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      CupertinoIcons.person_alt_circle,
-                      size: 100,
-                      color: Colors.redAccent.withOpacity(0.2),
-                    ),
-                    Text(
-                      'Login',
-                      style: TextStyle(fontSize: 30,color: Colors.redAccent.withOpacity(0.6),fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 300,
-                child: page[0]
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-
-int np = 1;
-
-List<bool> page = [true,false,false];
-
-class _firstpageState extends State<firstpage> {
-
-  List<register> det = [];
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Colors.redAccent.withOpacity(0.2),
-            Colors.redAccent.withOpacity(0.8),
-          ],
-        ),
-        borderRadius: const BorderRadius.only(topLeft: Radius.circular(50),topRight: Radius.circular(50)),
-      ),
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 50,horizontal: 20),
-            child: Column(
-              children:  [
-                const Text('Enter your details',style: TextStyle(color: Colors.white,fontSize: 20,fontWeight: FontWeight.bold),textAlign: TextAlign.start,),
-                hspace(20),
-                TextField(
-                  textCapitalization: TextCapitalization.words,
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(CupertinoIcons.person,color: Colors.redAccent.shade700,),
-                    focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red.withOpacity(0.8))
-                    ),
-                    enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red.withOpacity(0.2),width: 2)
-                    ),
-                    border: const OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                    ),
-                    contentPadding: const EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
-                    hintText: 'Username',
-                    labelText: 'Name',
-                    labelStyle: TextStyle(color: Colors.redAccent.withOpacity(0.5)),
-                    fillColor: Colors.white70,
-                    filled: true,
-                  ),
-                  onChanged: (String name){
-                    setState(() {
-                      pname = name;
-                    });
-                  },
-                ),
-                hspace(20),
-                TextField(
-                  textCapitalization: TextCapitalization.words,
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(CupertinoIcons.building_2_fill,color: Colors.redAccent.shade700,),
-                    focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red.withOpacity(0.8))
-                    ),
-                    enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red.withOpacity(0.2),width: 2)
-                    ),
-                    border: const OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                    ),
-                    contentPadding: const EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
-                    hintText: 'Name of Institution',
-                    labelText: 'Institution',
-                    labelStyle: TextStyle(color: Colors.redAccent.withOpacity(0.5)),
-                    fillColor: Colors.white70,
-                    filled: true,
-                  ),
-                  onChanged: (instition){
-                    setState(() {
-                      pinstut = instition;
-                    });
-                  },
-                ),
-                hspace(20,),
-                TextField(
-                  textCapitalization: TextCapitalization.words,
-                  decoration: InputDecoration(
-                    suffix: const Text('@gmail.com'),
-                    prefixIcon: Icon(Icons.email_outlined,color: Colors.redAccent.shade700,),
-                    focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red.withOpacity(0.8))
-                    ),
-                    enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red.withOpacity(0.2),width: 2)
-                    ),
-                    border: const OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                    ),
-                    contentPadding: const EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
-                    hintText: 'Useremail',
-                    labelText: 'Email',
-                    labelStyle: TextStyle(color: Colors.redAccent.withOpacity(0.5)),
-                    fillColor: Colors.white70,
-                    filled: true,
-                  ),
-                  onChanged: (email){
-                    setState(() {
-                      pemail = email;
-                    });
-                  },
-                ),
-                hspace(30),
-                Row(
-                  children: [
-                    Spacer(),
-                    InkWell(
-                      onTap: () async{
-                        SharedPreferences pref = await SharedPreferences.getInstance();
-                        pref.setString('pname', pname);
-                        pref.setString('pinstution', pinstut);
-                        pref.setString('pemail', pemail);
-
-                        route(context, screens[inrout]);
-                        /*setState(() {
-                    np = 1;
-                  });*/
-
-                      },
-                      child: SizedBox(
-                        width: 120,
-                        height: 50,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: Colors.redAccent,
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              const Text('Next',style: TextStyle(fontSize: 20,color: Colors.white70,),),
-                              wspace(10),
-                              const Icon(CupertinoIcons.arrow_right,color: Colors.white70,),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    wspace(20),
-                  ],
-                )
+        body: Container(
+          width: double.infinity,
+          height: double.infinity,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.bottomLeft,
+              end: Alignment.topRight,
+              colors: [
+                cr_trt.withOpacity(0.8),
+                cr_pri.withOpacity(0.8),
               ],
             ),
           ),
-        ],
-      ),
-    );
-  }
-}
-
-class _secondpageState extends State<secondpage> {
-
-  List<register> det = [];
-
-  @override
-  void initState() {
-    super.initState();
-    det = [
-      register(type: 'Spr number', yn: true),
-      register(type: 'Name', yn: false),
-      register(type: 'Register number', yn: true)
-    ];
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Colors.redAccent.withOpacity(0.2),
-            Colors.redAccent.withOpacity(0.8),
-          ],
-        ),
-        borderRadius: const BorderRadius.only(topLeft: Radius.circular(50),topRight: Radius.circular(50)),
-      ),
-      child: SizedBox(
-        width: double.infinity,
-        child: Padding(
-          padding: const EdgeInsets.only(top: 50,bottom: 50,left: 20,right: 20),
-          child: Stack(
-            alignment: Alignment.center,
+          padding: const EdgeInsets.symmetric(vertical: 20,horizontal: 20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Column(
-                children:  [
-                  const Text('Select register details',style: TextStyle(color: Colors.white,fontSize: 20,fontWeight: FontWeight.bold),textAlign: TextAlign.start,),
-                  hspace(20),
-                  ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: det.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return ListTile(
-                        title: Text(det.elementAt(index).type),
-                        leading: Checkbox(
-                          checkColor: Colors.white,
-                          activeColor: Colors.red,
-                          focusColor: Colors.yellowAccent,
-                          hoverColor: Colors.redAccent,
-                          value: det.elementAt(index).yn,
-                          onChanged: (bool? value) {
-                            setState(() {
-                              det.elementAt(index).yn = value!;
-                            });
-                          },
-                        ),
-                      );
-                    },
-                  )
-                ],
+              hspace(40.h),
+              const Spacer(),
+              Image.asset(height: 100.r,width: 100.r,'assets/qr.png'),
+              hspace(20.h),
+              Text(
+                'Codingo Qr',
+                style: GoogleFonts.ubuntu(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16.sp,
+                    letterSpacing: 1,
+                    color: cr_blk
+                ),
               ),
-              Positioned(
-                bottom: 20,
-                right: 20,
-                child: InkWell(
-                  onTap: () {
-                    /*setState(() {
-                      np--;
-                    });
-
-                     */
-                  },
-                  child: SizedBox(
-                    width: 120,
-                    height: 50,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        color: Colors.redAccent,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          const Text('Next ',style: TextStyle(fontSize: 20,color: Colors.white70,),),
-                          wspace(10),
-                          const Icon(CupertinoIcons.arrow_right,color: Colors.white70,),
-                        ],
-                      ),
+              hspace(10.h),
+              Text(
+                'In the world of QR codes, every scan tells a story.',
+                style: GoogleFonts.ubuntu(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 9.sp,
+                    color: cr_blk
+                ),
+              ),
+              const Spacer(),
+              Container(
+                padding: EdgeInsets.only(left: 5.w),
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'LOG IN :',
+                  style: GoogleFonts.ubuntu(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12.sp,
+                      letterSpacing: 2,
+                      color: cr_blk
+                  ),
+                ),
+              ),
+              hspace(5.h),
+              InkWell(
+                onTap: ()async{
+                  User? user = await authHelper.signInGoogle();
+                  if(user!=null){
+                    msg('Login Successfully');
+                  }else{
+                    msg('Error occured');
+                  }
+                },
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  color: cr_wht,
+                  elevation: 10,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 10.h),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(FontAwesomeIcons.google,color: cr_sec,),
+                        wspace(10.w),
+                        Text.rich(
+                          TextSpan(
+                            children: [
+                              TextSpan(
+                                text: 'Continue with Google',
+                                style: TextStyle(
+                                  color: cr_sec,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12.r,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        wspace(10.w),
+                      ],
                     ),
                   ),
                 ),
               ),
+              hspace(30.h)
             ],
           ),
         ),
@@ -325,23 +130,9 @@ class _secondpageState extends State<secondpage> {
   }
 }
 
-class mainlog extends StatefulWidget {
-  const mainlog({Key? key}) : super(key: key);
+class Login extends StatefulWidget {
+  const Login({Key? key}) : super(key: key);
 
   @override
-  _mainlogState createState() => _mainlogState();
-}
-
-class secondpage extends StatefulWidget {
-  const secondpage({Key? key}) : super(key: key);
-
-  @override
-  _secondpageState createState() => _secondpageState();
-}
-
-class firstpage extends StatefulWidget {
-  const firstpage({Key? key}) : super(key: key);
-
-  @override
-  _firstpageState createState() => _firstpageState();
+  _LoginState createState() => _LoginState();
 }

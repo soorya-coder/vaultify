@@ -9,12 +9,12 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:iconly/iconly.dart';
-import 'package:pass_locker/constant/color.dart';
-import 'package:pass_locker/constant/functions.dart';
-import 'package:pass_locker/constant/widget.dart';
-import 'package:pass_locker/db/passhelper.dart';
-import 'package:pass_locker/object/pword.dart';
-import 'package:pass_locker/screen/newpass.dart';
+import '../constant/color.dart';
+import '../constant/functions.dart';
+import '../constant/widget.dart';
+import '../db/passhelper.dart';
+import '../object/vault.dart';
+import '../screen/newpass.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -71,11 +71,11 @@ class _HomeState extends State<Home> {
               await Future.delayed(const Duration(seconds: 3));
               setState(() {});
             },
-            child: FutureBuilder(
-              future: Passheper.instance.getList(),
+            child: StreamBuilder(
+              stream: VaultHelper().getvaults(),
               builder: (context, AsyncSnapshot snapshot) {
                 if (snapshot.hasData) {
-                  List<Pword> plist = snapshot.data;
+                  List<Vault> plist = snapshot.data;
                   if (plist.isEmpty) {
                     return Center(
                       child: Text(
@@ -93,7 +93,7 @@ class _HomeState extends State<Home> {
                     itemCount: plist.length,
                     physics: const BouncingScrollPhysics(),
                     itemBuilder: (context, index) {
-                      Pword item = plist.elementAt(index);
+                      Vault item = plist.elementAt(index);
                       return Slidable(
                         startActionPane: ActionPane(
                           motion: const ScrollMotion(),
@@ -110,15 +110,12 @@ class _HomeState extends State<Home> {
                                 size: 30,
                               ),
                               onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => Newpass(
-                                            edit: true,
-                                            id: item.id!,
-                                            username: item.username,
-                                            site: item.site,
-                                            password: item.password)));
+                               route(context, Newpass(
+                                   edit: true,
+                                   id: item.id!,
+                                   username: item.username,
+                                   site: item.site,
+                                   password: item.password,),);
                               },
                             ),
                           ],
@@ -139,7 +136,7 @@ class _HomeState extends State<Home> {
                               ),
                               onPressed: () {
                                 setState(() {
-                                  Passheper.instance.remove(item.id!);
+                                  VaultHelper().delvault(item.id!);
                                 });
                               },
                             ),

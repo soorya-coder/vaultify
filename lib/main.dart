@@ -3,10 +3,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:vaultify/screen/newpass.dart';
 import 'package:vaultify/service/authHelper.dart';
 import 'constant/color.dart';
+import 'constant/functions.dart';
 import 'constant/widget.dart';
 import 'object/users.dart';
 import 'screen/home.dart';
@@ -43,6 +46,7 @@ class App extends StatelessWidget {
               '/login' : (context) => const Login(),
               '/about': (context) => const AboutUs(),
               '/splash' : (context) => const Splash(),
+              '/new' : (context) => Newpass(edit: false, username: '', site: '', password: ''),
               //'/' : (context) => (),
               //'/': (context) => (),
             },
@@ -335,148 +339,6 @@ class App extends StatelessWidget {
           '/new' : (context) => Newpass(edit: false, username: '', site: '', password: ''),
           //'/' : (context) => (),
         },
-      ),
-    );
-  }
-}
-
-class GetUser extends StatelessWidget {
-  GetUser({Key? key}) : super(key: key);
-  AuthHelper authHelper = AuthHelper();
-
-  @override
-  Widget build(BuildContext context) {
-    return StreamBuilder<User?>(
-      stream: authHelper.authchanges(),
-      builder: (context, AsyncSnapshot snapshot) {
-        if (snapshot.connectionState != ConnectionState.waiting) {
-          if (snapshot.hasData) {
-
-          } else {
-            return const Login();
-          }
-        }
-        if (snapshot.hasError) {
-          return Errored(
-            error: snapshot.error.toString(),
-          );
-        }
-        return const Splash();
-      },
-    );
-  }
-}
-
-class Splash extends StatelessWidget {
-  const Splash({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [cr_librown, cr_livioet],
-          ),
-        ),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Spacer(),
-              const CircleAvatar(
-                radius: 50,
-                backgroundColor: cr_wht,
-                child: Padding(
-                  padding: EdgeInsets.all(0),
-                  child: Icon(
-                    Icons.attach_money_rounded,
-                    color: cr_pri,
-                    size: 100,
-                  ),
-                ),
-              ),
-              hspace(20),
-              Text(
-                'Financiador',
-                style: GoogleFonts.dancingScript(
-                  fontSize: 30,
-                  letterSpacing: 5,
-                  fontWeight: FontWeight.w900,
-                  color: CupertinoColors.white,
-                ),
-              ),
-              const Spacer(),
-              LoadingAnimationWidget.hexagonDots(color: cr_pri, size: 30.r),
-              hspace(20.h),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class Loading extends StatelessWidget {
-  const Loading({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Container(
-          width: double.infinity,
-          height: double.infinity,
-          color: cr_pri.withOpacity(0.7),
-          child:
-          LoadingAnimationWidget.halfTriangleDot(color: cr_wht, size: 50),
-        ),
-      ),
-    );
-  }
-}
-
-class Errored extends StatelessWidget {
-  Errored({Key? key, required this.error}) : super(key: key);
-  String? error;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        color: cr_pri.withOpacity(0.7),
-        child: Center(
-          child: Text(
-            'error :$error',
-            style: TextStyle(color: Colors.redAccent.withOpacity(0.5)),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class Inform extends StatelessWidget {
-  Inform({Key? key, required this.info}) : super(key: key);
-  String info;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        color: cr_pri.withOpacity(0.7),
-        child: Center(
-          child: Text(
-            info,
-            style: TextStyle(color: Colors.amber.withOpacity(0.5)),
-          ),
-        ),
       ),
     );
   }
