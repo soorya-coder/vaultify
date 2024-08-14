@@ -13,7 +13,7 @@ class AuthHelper{
 
   static User? get myuser => FirebaseAuth.instance.currentUser;
 
-  static DocumentReference get docuser => FirebaseFirestore.instance.doc('/Users/${myuser!.uid}');
+  static DocumentReference get docuser => FirebaseFirestore.instance.doc('/users/${myuser!.uid}');
 
   Stream<User?> authchanges() => firebaseauth.authStateChanges();
 
