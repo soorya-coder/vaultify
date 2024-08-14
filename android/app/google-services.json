@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1090550476717",
+    "project_id": "vaultify-devs",
+    "storage_bucket": "vaultify-devs.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1090550476717:android:0c5c8b7ca6daffa380bb24",
+        "android_client_info": {
+          "package_name": "com.dark3r.vaultify"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHwV_F_BHBjIVFm43wyndtZXTOr7O021E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -81,9 +81,9 @@ class _HomeState extends State<Home> {
                       child: Text(
                         "No records. \n ",
                         style: TextStyle(
-                            color: cr_sec,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12.sp,
+                          color: cr_sec,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12.sp,
                         ),
                       ),
                     );
@@ -110,12 +110,12 @@ class _HomeState extends State<Home> {
                                 size: 30,
                               ),
                               onPressed: () {
-                               route(context, Newpass(
-                                   edit: true,
-                                   id: item.id!,
-                                   username: item.username,
-                                   site: item.site,
-                                   password: item.password,),);
+                                route(
+                                    context,
+                                    Newpass(
+                                      edit: true,
+                                      vault: item,
+                                    ));
                               },
                             ),
                           ],
@@ -144,18 +144,13 @@ class _HomeState extends State<Home> {
                         ),
                         child: InkWell(
                           onTap: () {
-                            route(
-                                context,
-                                Newpass(
-                                    edit: true,
-                                    id: item.id,
-                                    username: item.username,
-                                    site: item.site,
-                                    password: item.password));
+                            route(context, Newpass(edit: true, vault: item));
                           },
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 20),
+                              vertical: 10,
+                              horizontal: 20,
+                            ),
                             child: GlassCard(
                               heigth: 150,
                               width: size.width,
@@ -165,12 +160,12 @@ class _HomeState extends State<Home> {
                                   wspace(10),
                                   CircleAvatar(
                                     radius: 35,
+                                    backgroundColor: cr_pri,
                                     child: Icon(
                                       IconlyBold.lock,
                                       size: 30,
                                       color: cr_sec.withOpacity(0.8),
                                     ),
-                                    backgroundColor: cr_pri,
                                   ),
                                   wspace(10),
                                   Expanded(
@@ -238,13 +233,13 @@ class _HomeState extends State<Home> {
               routename(context, '/new');
             },
             shape: const CircleBorder(),
+            backgroundColor: cr_pri,
+            elevation: 0,
             child: const Icon(
               IconlyBroken.lock,
               size: 30,
               color: cr_sec,
             ),
-            backgroundColor: cr_pri,
-            elevation: 0,
           ),
         ),
         /*SizedBox(
