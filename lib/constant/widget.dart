@@ -1,64 +1,36 @@
 import 'dart:ui';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:iconly/iconly.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:vaultify/constant/functions.dart';
+import 'package:vaultify/screen/login.dart';
+import 'package:vaultify/service/authHelper.dart';
 import 'color.dart';
 
 
-class SearchFieldDrawer extends StatelessWidget {
-
-  Color color;
-
-  SearchFieldDrawer({
-    this.color = Colors.white
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return TextField(
-      style: TextStyle(color: color, fontSize: 14),
-      decoration: InputDecoration(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-        hintText: 'Search',
-        hintStyle: TextStyle(color: color),
-        prefixIcon:  Icon(Icons.search, color: color, size: 20,),
-        filled: true,
-        fillColor: Colors.white12,
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15),
-          borderSide: BorderSide(color: color.withOpacity(0.7)),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15),
-          borderSide: BorderSide(color: color.withOpacity(0.7)),
-        ),
-      ),
-    );
-  }
-
-}
-
 class Userhead extends StatelessWidget {
-
   Color color;
-  String name,email;
+  String name, email;
   IconData icon;
 
-  Userhead({
-    required this.color,
-    required this.name,
-    required this.email,
-    this.icon = FontAwesomeIcons.user
-  });
+  Userhead(
+      {Key? key,
+        required this.color,
+        required this.name,
+        required this.email,
+        this.icon = FontAwesomeIcons.user})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
+    //final Size size = MediaQuery.of(context).size;
     return Container(
-      height: size.height*0.15,
-      padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 10),
+      height: 70.h,
+      padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 5.w),
       child: Row(
         children: [
           Expanded(
@@ -66,13 +38,17 @@ class Userhead extends StatelessWidget {
             child: FittedBox(
               fit: BoxFit.fill,
               child: CircleAvatar(
-                child: Icon(IconlyBold.profile,color: cr_wht,size: 20,),
-                //foregroundImage: const AssetImage('assert/profile.jpg'),
                 backgroundColor: color,
+                foregroundImage:
+                CachedNetworkImageProvider(AuthHelper.myuser!.photoURL!),
+                child:  const Icon(
+                  IconlyBold.profile,
+                  color: cr_wht,
+                ),
               ),
             ),
           ),
-          wspace(10),
+          wspace(10.w),
           Expanded(
             flex: 4,
             child: Column(
@@ -81,11 +57,10 @@ class Userhead extends StatelessWidget {
                 const Spacer(),
                 Text(
                   name.toUpperCase(),
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w900,
-                      color: color,
-                      letterSpacing: 2
+                  style:  TextStyle(
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.w900,
+                    color: cr_sec,
                   ),
                   textAlign: TextAlign.start,
                 ),
@@ -93,10 +68,7 @@ class Userhead extends StatelessWidget {
                 Text(
                   email,
                   style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w300,
-                      color: color
-                  ),
+                      fontSize: 8.sp, fontWeight: FontWeight.w200, color: cr_sec),
                 ),
                 const Spacer(),
               ],
@@ -122,12 +94,12 @@ class MenuItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const color = Colors.white;
+    const color = cr_sec;
     const hoverColor = Colors.white70;
 
     return ListTile(
       leading: Icon(icon, color: color),
-      title: Text(text, style: TextStyle(color: color)),
+      title: Text(text, style: TextStyle(color: cr_wht,fontWeight: FontWeight.w900,letterSpacing: 1.sp)),
       hoverColor: hoverColor,
       onTap: onClicked,
     );
@@ -141,43 +113,117 @@ class Draw3r extends Drawer {
   Widget build(BuildContext context) {
     return Drawer(
       child: Material(
-        color: cr_pri.withOpacity(0.8),// Color(0xff4338CA),
+        color: cr_pri.withOpacity(0.8), // Color(0xff4338CA),
         child: ListView(
           children: [
             Container(
-              padding: const EdgeInsets.all(15.0),
+              padding: EdgeInsets.all(5.h),
               child: Column(
                 children: [
-                  hspace(12),
-                  SearchFieldDrawer(),
+                  hspace(8.h),
+                  FutureBuilder(
+                    future: PackageInfo.fromPlatform(),
+                    builder: (context, AsyncSnapshot<PackageInfo> snapshot) {
+                      if (snapshot.hasData) {
+                        return Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5.r),
+                            border: Border.all(color: cr_pri),
+                          ),
+                          width: double.infinity,
+                          padding: EdgeInsets.symmetric(vertical: 5.h),
+                          child: Center(
+                            child: Text.rich(
+                              TextSpan(children: [
+                                TextSpan(
+                                  text: snapshot.data!.appName.toUpperCase(),
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    color: cr_pri,
+                                  ),
+                                ),
+                                TextSpan(
+                                    text: ' @ ',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w100,
+                                        fontSize: 10.sp,
+                                        color: cr_sec.withOpacity(0.8))),
+                                TextSpan(
+                                    text:
+                                    '${snapshot.data!.version}+(${snapshot.data!.buildNumber})',
+                                    style: TextStyle(
+                                        fontSize: 12.sp, color: cr_pri))
+                              ]),
+                              style: TextStyle(
+                                color: CupertinoColors.white,
+                                fontSize: 12.sp,
+                                fontWeight: FontWeight.w100,
+                              ),
+                            ),
+                          ),
+                        );
+                      }
+                      return const SizedBox();
+                    },
+                  ),
+                  const Divider(color: cr_pri),
                   Userhead(
-                      color: cr_pri,
-                      name: 'Fechado',
-                      email: 'sooryasivask@gmail.com'
+                    color: cr_pri,
+                    name: AuthHelper.myuser!.displayName!,
+                    email: AuthHelper.myuser!.email!,
+                  ),
+                  const Divider(color: cr_pri),
+                  MenuItem(
+                    text: 'Home',
+                    icon: IconlyBold.home,
+                    onClicked: () {
+                      routename(context, '/home');
+                    },
                   ),
                   MenuItem(
-                    text: 'Account',
-                    icon: IconlyBroken.user_2,
-                    onClicked: () => selectedItem(context,0),
+                    text: 'About Us',
+                    icon: IconlyBold.discovery,
+                    onClicked: () {
+                      routename(context, '/about');
+                    },
                   ),
-                  hspace(5),
-                  MenuItem(
-                    text: 'Notifications',
-                    icon: IconlyBold.notification,
-                    onClicked: () => selectedItem(context,1),
-                  ),
-                  hspace(8),
-                  const Divider(color: Colors.white70),
-                  hspace(8),
-                  MenuItem(
-                    text: 'Settings',
-                    icon: IconlyBold.setting,
-                    onClicked: () => selectedItem(context,2),
-                  ),
-                  MenuItem(
-                    text: 'Log out',
-                    icon: IconlyLight.logout,
-                    onClicked: () {},
+                  hspace(2.h),
+                  const Divider(color: cr_pri),
+                  /*Card(
+                    color: cr_livioet,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(6.r),
+                    ),
+                    child: ListTile(
+                      onTap: (){
+
+                      },
+                      leading: Card(
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(2.r),
+                        ),color: cr_wht,
+                        child:  const Icon(Icons.add,color: cr_livioet),
+                      ),
+                      title: const Text('New Flow',style: TextStyle(color: cr_wht),),
+                    ),
+                  ),*/
+                  //const Spacer(),
+                  Card(
+                    color: cr_pri.withOpacity(0.8),
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(6.r),
+                    ),
+                    child: MenuItem(
+                      text: 'Log out',
+                      icon: IconlyLight.logout,
+                      onClicked: () async {
+                        await AuthHelper().signOut();
+                        route(context, const Login());
+                      },
+                    ),
                   ),
                 ],
               ),
@@ -187,7 +233,6 @@ class Draw3r extends Drawer {
       ),
     );
   }
-
 
   void selectedItem(BuildContext context, int index) {
     Navigator.of(context).pop();
@@ -206,7 +251,6 @@ class Draw3r extends Drawer {
 
      */
   }
-
 }
 
 class GlassCard extends StatelessWidget {

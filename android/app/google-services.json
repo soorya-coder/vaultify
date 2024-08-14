@@ -12,7 +12,12 @@
           "package_name": "com.dark3r.vaultify"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "1090550476717-m68j70iui3sfe8oio8d04rgudug2esns.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCHwV_F_BHBjIVFm43wyndtZXTOr7O021E"
@@ -20,7 +25,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1090550476717-m68j70iui3sfe8oio8d04rgudug2esns.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

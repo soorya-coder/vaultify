@@ -61,6 +61,7 @@ class App extends StatelessWidget {
 }
 
 class GetUser extends StatelessWidget {
+
   GetUser({Key? key}) : super(key: key);
   AuthHelper authHelper = AuthHelper();
 
@@ -71,19 +72,16 @@ class GetUser extends StatelessWidget {
       builder: (context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState != ConnectionState.done) {
           if (snapshot.hasData) {
-            return StreamBuilder<Users?>(
+            return StreamBuilder(
               stream: authHelper.startup(),
-              builder: (context, AsyncSnapshot<Users?> snapshot) {
-                if (!snapshot.hasError) {
-                  if (snapshot.connectionState != ConnectionState.done) {
-                    if (snapshot.hasData) {
-                      return Home();
-                    }
-                  }
-                  return const Loading();
-                } else {
+              builder: (context, AsyncSnapshot snapshot) {
+                if (snapshot.hasData) {
+                  return Home();
+                }
+                if (snapshot.hasError) {
                   return Errored(error: '${snapshot.error}1');
                 }
+                return const Loading();
               },
             );
           } else {

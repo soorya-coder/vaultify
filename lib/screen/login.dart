@@ -14,13 +14,13 @@ import '../service/authHelper.dart';
 class _LoginState extends State<Login> {
   TextEditingController emailcon = TextEditingController();
   TextEditingController passcon = TextEditingController();
-  AuthHelper authHelper =AuthHelper();
+  AuthHelper authHelper = AuthHelper();
 
   @override
   Widget build(BuildContext context) {
     //final Size size = MediaQuery.of(context).size;
     return WillPopScope(
-      onWillPop: () async{
+      onWillPop: () async {
         SystemNavigator.pop();
         return false;
       },
@@ -30,61 +30,74 @@ class _LoginState extends State<Login> {
           height: double.infinity,
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              begin: Alignment.bottomLeft,
-              end: Alignment.topRight,
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
               colors: [
-                cr_trt.withOpacity(0.8),
-                cr_pri.withOpacity(0.8),
+                cr_pri.withOpacity(0.9),
+                cr_sec.withOpacity(0.9),
+                cr_sec.withOpacity(0.9),
               ],
             ),
           ),
-          padding: const EdgeInsets.symmetric(vertical: 20,horizontal: 20),
+          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               hspace(40.h),
-              const Spacer(),
-              Image.asset(height: 100.r,width: 100.r,'assets/qr.png'),
+              const Spacer(flex: 2,),
+              hspace(10.h),
+              Container(
+                width: 100.r,
+                height: 100.r,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20.r),
+                  color: cr_pri,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.lock,
+                      color: cr_wht,
+                      size: 18.sp,
+                    ),
+                    hspace(5.h),
+                    Text(
+                      'Vaultify',
+                      style: GoogleFonts.styleScript(
+                        color: cr_wht,
+                        fontSize: 20.sp,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 1.sp,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const Spacer(flex: 2,),
               hspace(20.h),
               Text(
-                'Codingo Qr',
+                'Your digital world, secured—one password at a time.',
                 style: GoogleFonts.ubuntu(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16.sp,
-                    letterSpacing: 1,
-                    color: cr_blk
-                ),
-              ),
-              hspace(10.h),
-              Text(
-                'In the world of QR codes, every scan tells a story.',
-                style: GoogleFonts.ubuntu(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 9.sp,
-                    color: cr_blk
-                ),
-              ),
-              const Spacer(),
-              Container(
-                padding: EdgeInsets.only(left: 5.w),
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  'LOG IN :',
-                  style: GoogleFonts.ubuntu(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 12.sp,
-                      letterSpacing: 2,
-                      color: cr_blk
-                  ),
-                ),
+                    fontWeight: FontWeight.w400, fontSize: 9.sp, color: cr_blk),
               ),
               hspace(5.h),
+              Text(
+                'Rely on this tool to effortlessly track and retrieve your passwords whenever needed.',
+                style: GoogleFonts.ubuntu(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 10.sp,
+                  color: cr_blk,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const Spacer(),
               InkWell(
-                onTap: ()async{
+                onTap: () async {
                   User? user = await authHelper.signInGoogle();
-                  if(user!=null){
+                  if (user != null) {
                     msg('Login Successfully');
-                  }else{
+                  } else {
                     msg('Error occured');
                   }
                 },
@@ -92,14 +105,17 @@ class _LoginState extends State<Login> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  color: cr_wht,
+                  color: cr_pri,
                   elevation: 10,
                   child: Padding(
                     padding: EdgeInsets.symmetric(vertical: 10.h),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(FontAwesomeIcons.google,color: cr_sec,),
+                        const Icon(
+                          FontAwesomeIcons.google,
+                          color: cr_sec,
+                        ),
                         wspace(10.w),
                         Text.rich(
                           TextSpan(
@@ -121,7 +137,7 @@ class _LoginState extends State<Login> {
                   ),
                 ),
               ),
-              hspace(30.h)
+              hspace(20.h)
             ],
           ),
         ),
