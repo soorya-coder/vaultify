@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:vaultify/object/vault.dart';
 
 import '../constant/functions.dart';
-import '../service/authHelper.dart';
+import 'authHelper.dart';
 
 class VaultHelper {
 

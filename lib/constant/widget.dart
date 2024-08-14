@@ -11,7 +11,6 @@ import 'package:vaultify/screen/login.dart';
 import 'package:vaultify/service/authHelper.dart';
 import 'color.dart';
 
-
 class Userhead extends StatelessWidget {
   Color color;
   String name, email;
@@ -19,10 +18,10 @@ class Userhead extends StatelessWidget {
 
   Userhead(
       {Key? key,
-        required this.color,
-        required this.name,
-        required this.email,
-        this.icon = FontAwesomeIcons.user})
+      required this.color,
+      required this.name,
+      required this.email,
+      this.icon = FontAwesomeIcons.user})
       : super(key: key);
 
   @override
@@ -40,15 +39,15 @@ class Userhead extends StatelessWidget {
               child: CircleAvatar(
                 backgroundColor: color,
                 foregroundImage:
-                CachedNetworkImageProvider(AuthHelper.myuser!.photoURL!),
-                child:  const Icon(
+                    CachedNetworkImageProvider(AuthHelper.myuser!.photoURL!),
+                child: const Icon(
                   IconlyBold.profile,
                   color: cr_wht,
                 ),
               ),
             ),
           ),
-          wspace(10.w),
+          wspace(10),
           Expanded(
             flex: 4,
             child: Column(
@@ -57,18 +56,20 @@ class Userhead extends StatelessWidget {
                 const Spacer(),
                 Text(
                   name.toUpperCase(),
-                  style:  TextStyle(
+                  style: TextStyle(
                     fontSize: 12.sp,
                     fontWeight: FontWeight.w900,
                     color: cr_sec,
                   ),
                   textAlign: TextAlign.start,
                 ),
-                hspace(20),
+                hspace(5),
                 Text(
                   email,
                   style: TextStyle(
-                      fontSize: 8.sp, fontWeight: FontWeight.w200, color: cr_sec),
+                      fontSize: 6.sp,
+                      fontWeight: FontWeight.w200,
+                      color: cr_sec),
                 ),
                 const Spacer(),
               ],
@@ -99,7 +100,9 @@ class MenuItem extends StatelessWidget {
 
     return ListTile(
       leading: Icon(icon, color: color),
-      title: Text(text, style: TextStyle(color: cr_wht,fontWeight: FontWeight.w900,letterSpacing: 1.sp)),
+      title: Text(text,
+          style: TextStyle(
+              color: cr_wht, fontWeight: FontWeight.w900, letterSpacing: 1.sp)),
       hoverColor: hoverColor,
       onTap: onClicked,
     );
@@ -113,7 +116,7 @@ class Draw3r extends Drawer {
   Widget build(BuildContext context) {
     return Drawer(
       child: Material(
-        color: cr_pri.withOpacity(0.8), // Color(0xff4338CA),
+        color: cr_blk, // Color(0xff4338CA),
         child: ListView(
           children: [
             Container(
@@ -128,7 +131,7 @@ class Draw3r extends Drawer {
                         return Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5.r),
-                            border: Border.all(color: cr_pri),
+                            border: Border.all(color: cr_sec),
                           ),
                           width: double.infinity,
                           padding: EdgeInsets.symmetric(vertical: 5.h),
@@ -139,20 +142,25 @@ class Draw3r extends Drawer {
                                   text: snapshot.data!.appName.toUpperCase(),
                                   style: const TextStyle(
                                     fontWeight: FontWeight.w700,
-                                    color: cr_pri,
+                                    color: cr_sec,
                                   ),
                                 ),
                                 TextSpan(
-                                    text: ' @ ',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w100,
-                                        fontSize: 10.sp,
-                                        color: cr_sec.withOpacity(0.8))),
+                                  text: ' @ ',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w100,
+                                    fontSize: 10.sp,
+                                    color: cr_sec.withOpacity(0.8),
+                                  ),
+                                ),
                                 TextSpan(
-                                    text:
-                                    '${snapshot.data!.version}+(${snapshot.data!.buildNumber})',
-                                    style: TextStyle(
-                                        fontSize: 12.sp, color: cr_pri))
+                                  text:
+                                      '${snapshot.data!.version}+(${snapshot.data!.buildNumber})',
+                                  style: TextStyle(
+                                    fontSize: 12.sp,
+                                    color: cr_sec,
+                                  ),
+                                )
                               ]),
                               style: TextStyle(
                                 color: CupertinoColors.white,
@@ -234,39 +242,21 @@ class Draw3r extends Drawer {
     );
   }
 
-  void selectedItem(BuildContext context, int index) {
-    Navigator.of(context).pop();
-    /*switch (index) {
-      case 0:
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => const Scaffold(), // Page 1
-        ));
-        break;
-      case 1:
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => const Scaffold(), // Page 2
-        ));
-        break;
-    }
-
-     */
-  }
 }
 
 class GlassCard extends StatelessWidget {
-
   Widget child;
-  double width,heigth;
+  double width, heigth;
   EdgeInsets padding;
   Color color;
-  GlassCard({
-    required this.child,
-    this.width = 150,
-    this.heigth = 200,
-    this.color = Colors.grey,
-    this.padding = const EdgeInsets.all(10),
-    Key? key
-  }) : super(key: key);
+  GlassCard(
+      {required this.child,
+      this.width = 150,
+      this.heigth = 200,
+      this.color = Colors.grey,
+      this.padding = const EdgeInsets.all(10),
+      Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -291,11 +281,15 @@ class GlassCard extends StatelessWidget {
 }
 
 class Glassbutton extends StatelessWidget {
-
   Function onpressed;
   String name;
   Color color;
-  Glassbutton({Key? key,required this.name,required this.color,required this.onpressed}) : super(key: key);
+  Glassbutton(
+      {Key? key,
+      required this.name,
+      required this.color,
+      required this.onpressed})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -303,7 +297,9 @@ class Glassbutton extends StatelessWidget {
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 0.0, sigmaY: 0.0),
         child: InkWell(
-          onTap: (){onpressed();},
+          onTap: () {
+            onpressed();
+          },
           splashColor: color.withOpacity(0.5),
           hoverColor: color.withOpacity(0.5),
           child: Container(
@@ -317,10 +313,7 @@ class Glassbutton extends StatelessWidget {
               child: Text(
                 name.toUpperCase(),
                 style: TextStyle(
-                    fontSize: 20.0,
-                    color: color,
-                    fontWeight: FontWeight.bold
-                ),
+                    fontSize: 20.0, color: color, fontWeight: FontWeight.bold),
               ),
             ),
           ),
@@ -330,14 +323,14 @@ class Glassbutton extends StatelessWidget {
   }
 }
 
-Widget option({Color color=cr_sec}){
+Widget option({Color color = cr_sec}) {
   return PopupMenuButton<String>(
     icon: ShaderMask(
       blendMode: BlendMode.srcATop,
       shaderCallback: (boulds) => LinearGradient(
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
-        colors:[color,color],
+        colors: [color, color],
       ).createShader(boulds),
       child: const Icon(CupertinoIcons.ellipsis_vertical),
     ),
@@ -345,52 +338,53 @@ Widget option({Color color=cr_sec}){
       PopupMenuItem(
         child: Row(
           children: const [
-            Icon(CupertinoIcons.delete,),
+            Icon(
+              CupertinoIcons.delete,
+            ),
             Spacer(),
             Center(child: Text('')),
           ],
         ),
         value: '0',
-        onTap: (){
-
-        },
+        onTap: () {},
       ),
       PopupMenuItem(
         child: Row(
           children: const [
-            Icon(Icons.edit,),
-            SizedBox(width: 15,),
+            Icon(
+              Icons.edit,
+            ),
+            SizedBox(
+              width: 15,
+            ),
             Center(child: Text('')),
           ],
         ),
         value: '0',
-        onTap: (){
-
-        },
+        onTap: () {},
       )
     ],
   );
 }
 
-Widget back(Function function){
+Widget back(Function function) {
   return IconButton(
       onPressed: () => function,
       icon: const Icon(
         CupertinoIcons.back,
         color: Colors.white,
-      )
-  );
+      ));
 }
 
-Widget hspace(double height){
+Widget hspace(double height) {
   return SizedBox(height: height.h);
 }
 
-Widget wspace(double width){
+Widget wspace(double width) {
   return SizedBox(width: width.w);
 }
 
-Widget present(){
+Widget present() {
   return Container(
     height: 60,
     width: 120,
@@ -412,11 +406,8 @@ Widget present(){
                     color: Colors.white,
                     size: 40,
                   ),
-                  onPressed: (){
-
-                  },
+                  onPressed: () {},
                 ),
-
               ),
             ),
           ),
@@ -428,7 +419,7 @@ Widget present(){
                   color: Colors.white,
                   size: 40,
                 ),
-                onPressed: (){},
+                onPressed: () {},
               ),
             ),
           )
@@ -477,7 +468,8 @@ Widget present(){
 class ButtonImageFb1 extends StatelessWidget {
   final String text;
   final Function() onPressed;
-  const ButtonImageFb1({required this.text, required this.onPressed, Key? key}) : super(key: key);
+  const ButtonImageFb1({required this.text, required this.onPressed, Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -496,13 +488,15 @@ class ButtonImageFb1 extends StatelessWidget {
           child: MaterialButton(
             onPressed: onPressed,
             splashColor: Colors.lightBlue,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(36)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(36)),
             padding: const EdgeInsets.all(0.0),
             child: Ink(
                 decoration: BoxDecoration(
                   //gradient:
                   image: const DecorationImage(
-                    image: NetworkImage("https://firebasestorage.googleapis.com/v0/b/flutterbricks-public.appspot.com/o/finance_app_2%2FbuttonBackgroundSmall.png?alt=media&token=fa2f9bba-120a-4a94-8bc2-f3adc2b58a73"),
+                    image: NetworkImage(
+                        "https://firebasestorage.googleapis.com/v0/b/flutterbricks-public.appspot.com/o/finance_app_2%2FbuttonBackgroundSmall.png?alt=media&token=fa2f9bba-120a-4a94-8bc2-f3adc2b58a73"),
                     fit: BoxFit.cover,
                   ),
                   borderRadius: BorderRadius.circular(36),
@@ -512,9 +506,10 @@ class ButtonImageFb1 extends StatelessWidget {
                         minWidth: 88.0,
                         minHeight: 36.0), // min sizes for Material buttons
                     alignment: Alignment.center,
-                    child:  Text(text,
+                    child: Text(text,
                         style: const TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.w300)))),
+                            color: Colors.white,
+                            fontWeight: FontWeight.w300)))),
           ),
         ),
       ),
@@ -533,20 +528,20 @@ class InfoCard extends StatelessWidget {
 
   const InfoCard(
       {required this.title,
-        this.body =
-        """Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia, molestiae quas vel sint commodi repudi conseqr!""",
-        required this.onMoreTap,
-        this.subIcon = const CircleAvatar(
-          child: Icon(
-            Icons.directions,
-            color: Colors.white,
-          ),
-          backgroundColor: Colors.orange,
-          radius: 25,
+      this.body =
+          """Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia, molestiae quas vel sint commodi repudi conseqr!""",
+      required this.onMoreTap,
+      this.subIcon = const CircleAvatar(
+        child: Icon(
+          Icons.directions,
+          color: Colors.white,
         ),
-        this.subInfoText = "545 miles",
-        this.subInfoTitle = "Directions",
-        Key? key})
+        backgroundColor: Colors.orange,
+        radius: 25,
+      ),
+      this.subInfoText = "545 miles",
+      this.subInfoTitle = "Directions",
+      Key? key})
       : super(key: key);
 
   @override
@@ -596,9 +591,9 @@ class InfoCard extends StatelessWidget {
                   onTap: onMoreTap,
                   child: const Center(
                       child: Text(
-                        "More",
-                        style: const TextStyle(color: Colors.orange),
-                      )),
+                    "More",
+                    style: const TextStyle(color: Colors.orange),
+                  )),
                 ),
               ),
             ],
@@ -607,7 +602,7 @@ class InfoCard extends StatelessWidget {
           Text(
             body,
             style:
-            TextStyle(color: Colors.white.withOpacity(.75), fontSize: 14),
+                TextStyle(color: Colors.white.withOpacity(.75), fontSize: 14),
           ),
           const SizedBox(height: 15),
           Container(
@@ -647,6 +642,7 @@ class InfoCard extends StatelessWidget {
     );
   }
 }
+
 class CardFb1 extends StatelessWidget {
   final String text;
   final String imageUrl;
@@ -655,10 +651,10 @@ class CardFb1 extends StatelessWidget {
 
   const CardFb1(
       {required this.text,
-        required this.imageUrl,
-        required this.subtitle,
-        required this.onPressed,
-        Key? key})
+      required this.imageUrl,
+      required this.subtitle,
+      required this.onPressed,
+      Key? key})
       : super(key: key);
 
   @override
@@ -717,7 +713,6 @@ class DialogFb1 extends StatelessWidget {
   final primaryColor = const Color(0xff4338CA);
   final accentColor = const Color(0xffffffff);
 
-
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -770,8 +765,7 @@ class DialogFb1 extends StatelessWidget {
                 SimpleBtn1(text: "Great", onPressed: () {}),
                 SimpleBtn1(
                   text: "Not bad",
-                  onPressed: () {
-                  },
+                  onPressed: () {},
                   invertedColors: true,
                 ),
               ],
@@ -789,9 +783,9 @@ class SimpleBtn1 extends StatelessWidget {
   final bool invertedColors;
   const SimpleBtn1(
       {required this.text,
-        required this.onPressed,
-        this.invertedColors = false,
-        Key? key})
+      required this.onPressed,
+      this.invertedColors = false,
+      Key? key})
       : super(key: key);
   final primaryColor = const Color(0xff4338CA);
   final accentColor = const Color(0xffffffff);
@@ -822,8 +816,8 @@ class SimpleBtn1 extends StatelessWidget {
 
 class EmailInputFb1 extends StatelessWidget {
   final TextEditingController inputController;
-  const EmailInputFb1({Key? key,required this.inputController}) : super(key: key);
-
+  const EmailInputFb1({Key? key, required this.inputController})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -869,7 +863,7 @@ class EmailInputFb1 extends StatelessWidget {
               hintText: 'Enter your email',
               hintStyle: TextStyle(color: Colors.grey.withOpacity(.75)),
               contentPadding:
-              const EdgeInsets.symmetric(vertical: 0.0, horizontal: 20.0),
+                  const EdgeInsets.symmetric(vertical: 0.0, horizontal: 20.0),
               border: const OutlineInputBorder(
                 borderSide: BorderSide(color: primaryColor, width: 1.0),
                 borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -878,10 +872,10 @@ class EmailInputFb1 extends StatelessWidget {
                 borderSide: BorderSide(color: secondaryColor, width: 1.0),
                 borderRadius: BorderRadius.all(Radius.circular(10.0)),
               ),
-              errorBorder:const OutlineInputBorder(
+              errorBorder: const OutlineInputBorder(
                 borderSide: BorderSide(color: errorColor, width: 1.0),
                 borderRadius: BorderRadius.all(Radius.circular(10.0)),
-              ) ,
+              ),
               enabledBorder: const OutlineInputBorder(
                 borderSide: BorderSide(color: primaryColor, width: 1.0),
                 borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -894,27 +888,29 @@ class EmailInputFb1 extends StatelessWidget {
   }
 }
 
-gradient4(){
+gradient4() {
   return LinearGradient(colors: [Colors.blue, Colors.blue.shade900]);
 }
 
 class AnimatedPageIndicatorFb1 extends StatelessWidget {
   const AnimatedPageIndicatorFb1(
       {Key? key,
-        required this.currentPage,
-        required this.numPages,
-        this.dotHeight = 10,
-        this.activeDotHeight = 10,
-        this.dotWidth = 10,
-        this.activeDotWidth = 20,
-        this.gradient =
-        const LinearGradient(colors: [Color(0xff4338CA), Color(0xff6D28D9)]),
-        this.activeGradient =
-        const LinearGradient(colors: [Color(0xff4338CA), Color(0xff6D28D9)])})
+      required this.currentPage,
+      required this.numPages,
+      this.dotHeight = 10,
+      this.activeDotHeight = 10,
+      this.dotWidth = 10,
+      this.activeDotWidth = 20,
+      this.gradient =
+          const LinearGradient(colors: [Color(0xff4338CA), Color(0xff6D28D9)]),
+      this.activeGradient =
+          const LinearGradient(colors: [Color(0xff4338CA), Color(0xff6D28D9)])})
       : super(key: key);
 
-  final int currentPage; //the index of the active dot, i.e. the index of the page you're on
-  final int numPages; //the total number of dots, i.e. the number of pages your displaying
+  final int
+      currentPage; //the index of the active dot, i.e. the index of the page you're on
+  final int
+      numPages; //the total number of dots, i.e. the number of pages your displaying
 
   final double dotWidth; //the width of all non-active dots
   final double activeDotWidth; //the width of the active dot
@@ -938,7 +934,13 @@ class AnimatedPageIndicatorFb1 extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: List.generate(
           numPages,
-              (index) => AnimatedPageIndicatorDot(isActive: currentPage == index, gradient: gradient, activeGradient: activeGradient, activeWidth: activeDotWidth, activeHeight: activeDotHeight,),
+          (index) => AnimatedPageIndicatorDot(
+            isActive: currentPage == index,
+            gradient: gradient,
+            activeGradient: activeGradient,
+            activeWidth: activeDotWidth,
+            activeHeight: activeDotHeight,
+          ),
         ),
       ),
     );
@@ -948,13 +950,13 @@ class AnimatedPageIndicatorFb1 extends StatelessWidget {
 class AnimatedPageIndicatorDot extends StatelessWidget {
   const AnimatedPageIndicatorDot(
       {Key? key,
-        required this.isActive,
-        this.height = 10,
-        this.width = 10,
-        this.activeWidth = 20,
-        this.activeHeight = 10,
-        required this.gradient,
-        required this.activeGradient})
+      required this.isActive,
+      this.height = 10,
+      this.width = 10,
+      this.activeWidth = 20,
+      this.activeHeight = 10,
+      required this.gradient,
+      required this.activeGradient})
       : super(key: key);
 
   final bool isActive;
@@ -969,7 +971,7 @@ class AnimatedPageIndicatorDot extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimatedContainer(
       width: isActive ? activeWidth : width,
-      height: isActive? activeHeight : height,
+      height: isActive ? activeHeight : height,
       duration: const Duration(milliseconds: 300),
       decoration: BoxDecoration(
           gradient: isActive ? activeGradient : gradient,
@@ -978,8 +980,11 @@ class AnimatedPageIndicatorDot extends StatelessWidget {
   }
 }
 
-String im1 = "https://firebasestorage.googleapis.com/v0/b/flutterbricks-public.appspot.com/o/Holiday%2FThanksgiving-03.png?alt=media&token=5e0b5969-4de3-4dd9-83b3-f24d4f314bf7";
-String dear1 ="https://firebasestorage.googleapis.com/v0/b/flutterbricks-public.appspot.com/o/Christmas%20Illustrations%2FReindeer.png?alt=media&token=83096fa1-a6f3-4ef4-80d9-83c75f5a13dc";
-String crima1 = "https://firebasestorage.googleapis.com/v0/b/flutterbricks-public.appspot.com/o/Christmas%20Illustrations%2FSocks.png?alt=media&token=705f3255-90cd-4c4c-87bc-5cb4f3eabc25";
-String mous1 = "https://firebasestorage.googleapis.com/v0/b/flutterbricks-public.appspot.com/o/Illustrations%20Icons%2Fgamingmouse.png?alt=media&token=81fd6f20-2322-4435-af62-25b4cf5d9e81";
-
+String im1 =
+    "https://firebasestorage.googleapis.com/v0/b/flutterbricks-public.appspot.com/o/Holiday%2FThanksgiving-03.png?alt=media&token=5e0b5969-4de3-4dd9-83b3-f24d4f314bf7";
+String dear1 =
+    "https://firebasestorage.googleapis.com/v0/b/flutterbricks-public.appspot.com/o/Christmas%20Illustrations%2FReindeer.png?alt=media&token=83096fa1-a6f3-4ef4-80d9-83c75f5a13dc";
+String crima1 =
+    "https://firebasestorage.googleapis.com/v0/b/flutterbricks-public.appspot.com/o/Christmas%20Illustrations%2FSocks.png?alt=media&token=705f3255-90cd-4c4c-87bc-5cb4f3eabc25";
+String mous1 =
+    "https://firebasestorage.googleapis.com/v0/b/flutterbricks-public.appspot.com/o/Illustrations%20Icons%2Fgamingmouse.png?alt=media&token=81fd6f20-2322-4435-af62-25b4cf5d9e81";

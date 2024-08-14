@@ -8,12 +8,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:iconly/iconly.dart';
+import 'package:vaultify/object/vault.dart';
 import '../constant/color.dart';
 import '../constant/functions.dart';
 import '../constant/widget.dart';
-import '../db/passhelper.dart';
-import '../object/vault.dart';
+import '../service/passhelper.dart';
 import '../screen/newpass.dart';
 
 class Home extends StatefulWidget {
@@ -37,191 +38,216 @@ class _HomeState extends State<Home> {
         return true;
       },
       child: Scaffold(
-        appBar: AppBar(
-          foregroundColor: cr_secac,
-          title: const Text.rich(
-            TextSpan(
-              style: TextStyle(color: cr_sec),
-              children: [
-                TextSpan(text: 'Password ', style: TextStyle(fontSize: 30)),
-                TextSpan(
-                    text: ' locker',
-                    style:
-                        TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-              ],
-            ),
-          ),
-          backgroundColor: cr_pri,
-        ),
+        backgroundColor: cr_blk,
         drawer: const Draw3r(),
-        body: Container(
-          decoration: const BoxDecoration(
-              gradient: LinearGradient(
-            colors: [
-              cr_blk,
-              cr_pri,
-            ],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          )),
-          child: RefreshIndicator(
-            color: cr_pri,
-            backgroundColor: cr_sec,
-            onRefresh: () async {
-              await Future.delayed(const Duration(seconds: 3));
-              setState(() {});
-            },
-            child: StreamBuilder(
-              stream: VaultHelper().getvaults(),
-              builder: (context, AsyncSnapshot snapshot) {
-                if (snapshot.hasData) {
-                  List<Vault> plist = snapshot.data;
-                  if (plist.isEmpty) {
-                    return Center(
-                      child: Text(
-                        "No records. \n ",
-                        style: TextStyle(
-                          color: cr_sec,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 12.sp,
-                        ),
-                      ),
-                    );
-                  }
-                  return ListView.builder(
-                    padding: const EdgeInsets.only(top: 20),
-                    itemCount: plist.length,
-                    physics: const BouncingScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      Vault item = plist.elementAt(index);
-                      return Slidable(
-                        startActionPane: ActionPane(
-                          motion: const ScrollMotion(),
-                          children: [
-                            MaterialButton(
-                              color: Colors.blue.withOpacity(0.15),
-                              elevation: 0,
-                              height: 50,
-                              minWidth: 50,
-                              shape: const CircleBorder(),
-                              child: const Icon(
-                                Icons.edit,
-                                color: Colors.blue,
-                                size: 30,
-                              ),
-                              onPressed: () {
-                                route(
-                                    context,
-                                    Newpass(
-                                      edit: true,
-                                      vault: item,
-                                    ));
-                              },
-                            ),
-                          ],
-                        ),
-                        endActionPane: ActionPane(
-                          motion: const ScrollMotion(),
-                          children: [
-                            MaterialButton(
-                              color: Colors.redAccent.withOpacity(0.15),
-                              elevation: 0,
-                              height: 70,
-                              minWidth: 70,
-                              shape: const CircleBorder(),
-                              child: const Icon(
-                                Icons.delete,
-                                color: Colors.redAccent,
-                                size: 30,
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  VaultHelper().delvault(item.id!);
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                        child: InkWell(
-                          onTap: () {
-                            route(context, Newpass(edit: true, vault: item));
+        body: SafeArea(
+          child: Container(
+            decoration: const BoxDecoration(
+                gradient: LinearGradient(
+              colors: [
+                cr_blk,
+                cr_pri,
+              ],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            )),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    wspace(5),
+                    Builder(
+                      builder: (context) {
+                        return IconButton(
+                          onPressed: () {
+                            Scaffold.of(context).openDrawer();
                           },
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 10,
-                              horizontal: 20,
-                            ),
-                            child: GlassCard(
-                              heigth: 150,
-                              width: size.width,
-                              color: cr_sec,
-                              child: Row(
+                          icon: Icon(
+                            IconlyBold.category,
+                            color: cr_sec,
+                            size: 15.r,
+                          ),
+                        );
+                      }
+                    ),
+                    wspace(5),
+                    Text(
+                      'Vaultify',
+                      style: GoogleFonts.styleScript(
+                          color: cr_sec,
+                          fontSize: 18.sp,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 2.sp),
+                    ),
+                  ],
+                ),
+                StreamBuilder(
+                  stream: VaultHelper().getvaults(),
+                  builder: (context, AsyncSnapshot snapshot) {
+                    if (snapshot.hasData) {
+                      List<Vault> plist = snapshot.data;
+                      if (plist.isEmpty) {
+                        return Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "No records. tap lock icon to add new ",
+                                style: TextStyle(
+                                  color: cr_sec,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12.sp,
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+                      return RefreshIndicator(
+                        color: cr_pri,
+                        backgroundColor: cr_sec,
+                        onRefresh: () async {
+                          await Future.delayed(const Duration(seconds: 3));
+                          setState(() {});
+                        },
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          padding: const EdgeInsets.only(top: 20),
+                          itemCount: plist.length,
+                          physics: const BouncingScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            Vault item = plist.elementAt(index);
+                            bool show = false;
+                            return Slidable(
+                              startActionPane: ActionPane(
+                                extentRatio: 0.2,
+                                motion: const ScrollMotion(),
                                 children: [
-                                  wspace(10),
-                                  CircleAvatar(
-                                    radius: 35,
-                                    backgroundColor: cr_pri,
-                                    child: Icon(
-                                      IconlyBold.lock,
-                                      size: 30,
-                                      color: cr_sec.withOpacity(0.8),
-                                    ),
-                                  ),
-                                  wspace(10),
-                                  Expanded(
-                                    child: ListTile(
-                                      title: Text(
-                                        item.site.toUpperCase(),
-                                        style: const TextStyle(
-                                            fontSize: 28, color: cr_blk),
-                                      ),
-                                      subtitle: Text(
-                                        item.username,
-                                        style: const TextStyle(
-                                            fontSize: 16, color: cr_grey),
+                                  MaterialButton(
+                                    color: Colors.blue.withOpacity(0.15),
+                                    elevation: 0,
+                                    shape: const CircleBorder(),
+                                    child: Padding(
+                                      padding: EdgeInsets.all(5.r),
+                                      child: Icon(
+                                        Icons.edit,
+                                        color: Colors.blue,
+                                        size: 20.r,
                                       ),
                                     ),
+                                    onPressed: () {
+                                      route(
+                                          context,
+                                          Newpass(
+                                            edit: true,
+                                            vault: item,
+                                          ));
+                                    },
                                   ),
-                                  wspace(10),
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(40),
-                                      color: cr_blk,
-                                    ),
-                                    child: IconButton(
-                                        onPressed: () async {
-                                          Clipboard.setData(ClipboardData(
-                                              text: item.password));
-                                          Fluttertoast.showToast(
-                                              msg:
-                                                  'Password Copied to clipboard');
-                                        },
-                                        icon: const Icon(
-                                          FontAwesomeIcons.copy,
-                                          color: cr_secac,
-                                        )),
-                                  ),
-                                  wspace(10)
                                 ],
                               ),
-                            ),
-                          ),
+                              endActionPane: ActionPane(
+                                extentRatio: 0.2,
+                                motion: const ScrollMotion(),
+                                children: [
+                                  MaterialButton(
+                                    color: Colors.redAccent.withOpacity(0.15),
+                                    elevation: 0,
+                                    shape: const CircleBorder(),
+                                    child: Padding(
+                                      padding: EdgeInsets.all(5.r),
+                                      child: Icon(
+                                        IconlyBold.delete,
+                                        color: Colors.redAccent,
+                                        size: 20.r,
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        VaultHelper().delvault(item.id!);
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
+                              child: InkWell(
+                                onTap: () {
+                                  route(context,
+                                      Newpass(edit: true, vault: item));
+                                },
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 10.h, horizontal: 10.w),
+                                  child: GlassCard(
+                                    heigth: 70.h,
+                                    width: size.width,
+                                    color: cr_sec,
+                                    child: Row(
+                                      children: [
+                                        wspace(5),
+                                        CircleAvatar(
+                                          radius: 20.sp,
+                                          backgroundColor: cr_pri,
+                                          child: Icon(
+                                            IconlyBold.lock,
+                                            size: 15.r,
+                                            color: cr_sec.withOpacity(0.8),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: ListTile(
+                                            title: Text(
+                                              item.site.toUpperCase(),
+                                              style: TextStyle(
+                                                fontSize: 12.sp,
+                                                color: cr_blk,
+                                              ),
+                                            ),
+                                            subtitle: Text(
+                                              item.username,
+                                              style: TextStyle(
+                                                fontSize: 10.sp,
+                                                color: cr_grey,
+                                              ),
+                                            ),
+                                            trailing: IconButton(
+                                                onPressed: () async {
+                                                  Clipboard.setData(ClipboardData(
+                                                      text: item.password));
+                                                  Fluttertoast.showToast(
+                                                      msg:
+                                                      'Password Copied to clipboard');
+                                                },
+                                                icon: Icon(
+                                                  FontAwesomeIcons.copy,
+                                                  color: cr_secac,
+                                                  size: 12.sp,
+                                                )),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
                         ),
                       );
-                    },
-                  );
-                }
-                if (snapshot.hasError) {
-                  return Center(
-                    child: Text(snapshot.error.toString()),
-                  );
-                }
-                return const Center(
-                  child: CircularProgressIndicator(
-                    color: cr_sec,
-                  ),
-                );
-              },
+                    }
+                    if (snapshot.hasError) {
+                      return Center(
+                        child: Text(snapshot.error.toString()),
+                      );
+                    }
+                    return const Center(
+                      child: CircularProgressIndicator(
+                        color: cr_sec,
+                      ),
+                    );
+                  },
+                ),
+              ],
             ),
           ),
         ),

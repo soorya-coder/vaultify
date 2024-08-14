@@ -2,14 +2,15 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:vaultify/object/vault.dart';
 
 import '../constant/color.dart';
 import '../constant/functions.dart';
 import '../constant/widget.dart';
-import '../db/passhelper.dart';
-import '../object/vault.dart';
+import '../service/passhelper.dart';
 
 class Newpass extends StatefulWidget {
   Vault vault;
@@ -50,25 +51,36 @@ class _NewpassState extends State<Newpass> {
         return true;
       },
       child: Scaffold(
-        backgroundColor: cr_pri,
+        backgroundColor: cr_blk,
         appBar: AppBar(
           backgroundColor: cr_pri,
           leading: IconButton(
-            icon: const Icon(CupertinoIcons.back),
+            icon: const Icon(
+              CupertinoIcons.back,
+              color: cr_sec,
+            ),
             onPressed: () {
               goback(context);
             },
           ),
-          title: const Text.rich(TextSpan(
+          title: Text.rich(
+            TextSpan(
               style: TextStyle(
-                  color: cr_secac,
-                  fontSize: 30,
-                  letterSpacing: 2,
-                  wordSpacing: 5),
-              children: [
-                TextSpan(text: 'ADD '),
-                TextSpan(text: 'NEW'),
-              ])),
+                color: cr_secac,
+                fontSize: 12.sp,
+                letterSpacing: 2,
+                wordSpacing: 5,
+              ),
+              children: const [
+                TextSpan(
+                  text: 'ADD ',
+                ),
+                TextSpan(
+                  text: 'NEW',
+                ),
+              ],
+            ),
+          ),
           actions: const [
             // edit ?  option(id!) : SizedBox(),
           ],
@@ -84,217 +96,212 @@ class _NewpassState extends State<Newpass> {
                     'null ' * 1000,
                     style: TextStyle(
                         color: Colors.redAccent.shade100,
-                        fontSize: 20,
+                        fontSize: 10.sp,
                         fontWeight: FontWeight.w100,
                         letterSpacing: 2),
                   ),
                 ),
               ),
-              Center(
-                child: SizedBox(
-                  width: size.width,
-                  height: size.height * 0.45,
-                  child: Card(
-                      margin: const EdgeInsets.fromLTRB(10, 10, 10, 20),
-                      color: cr_blue.withOpacity(0.8),
-                      elevation: 100,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20)),
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text.rich(TextSpan(children: [
-                              TextSpan(
-                                  text: 'Enter your ',
-                                  style:
-                                      TextStyle(fontSize: 20, color: cr_pri)),
-                              TextSpan(
-                                  text: ' detail',
-                                  style: TextStyle(fontSize: 30, color: cr_pri))
-                            ])),
-                            hspace(20),
-                            TextField(
-                                controller: usercon,
-                                textCapitalization: TextCapitalization.words,
-                                decoration: InputDecoration(
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Card(
+                    margin: EdgeInsets.symmetric(horizontal: 5.w),
+                    color: cr_pri.withOpacity(1),
+                    elevation: 10,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5.r)),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10.w),
+                      child: Column(
+                        children: [
+                          hspace(10),
+                          Text(
+                            'Enter your details to encrypt',
+                            style: TextStyle(
+                                color: cr_sec,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12.sp),
+                          ),
+                          hspace(10),
+                          TextField(
+                              controller: usercon,
+                              textCapitalization: TextCapitalization.words,
+                              decoration: InputDecoration(
+                                fillColor: CupertinoColors.white,
+                                filled: true,
+                                prefixIcon: const Padding(
+                                  padding: EdgeInsets.only(left: 10, right: 10),
+                                  child: Icon(
+                                    CupertinoIcons.person_alt,
+                                    color: cr_sec,
+                                  ),
+                                ),
+                                border: norborder,
+                                enabledBorder: norborder,
+                                focusedBorder: fosborder,
+                                hintText: 'Name',
+                                hintStyle: hintstyle,
+                                labelText: 'username'.toUpperCase(),
+                                labelStyle: hintstyle,
+                              ),
+                              style: TextStyle(
+                                color: Colors.blue.withOpacity(0.8),
+                              ),
+                              keyboardType: TextInputType.name,
+                              onChanged: (text) {
+                                vault.username = text;
+                                //name = text;
+                              }),
+                          hspace(20),
+                          TextField(
+                              controller: sitecon,
+                              textCapitalization: TextCapitalization.none,
+                              decoration: InputDecoration(
+                                fillColor: CupertinoColors.white,
+                                filled: true,
+                                prefixIcon: const Padding(
+                                  padding: EdgeInsets.only(left: 10, right: 10),
+                                  child: Icon(
+                                    CupertinoIcons.personalhotspot,
+                                    color: cr_sec,
+                                  ),
+                                ),
+                                border: norborder,
+                                enabledBorder: norborder,
+                                focusedBorder: fosborder,
+                                hintText: 'site',
+                                hintStyle: hintstyle,
+                                labelText: 'website'.toUpperCase(),
+                                labelStyle: hintstyle,
+                              ),
+                              style: TextStyle(
+                                color: Colors.blue.withOpacity(0.8),
+                              ),
+                              keyboardType: TextInputType.name,
+                              onChanged: (text) {
+                                vault.site = text;
+                              }),
+                          hspace(20),
+                          TextField(
+                              textCapitalization: TextCapitalization.words,
+                              controller: passcon,
+                              decoration: InputDecoration(
                                   fillColor: CupertinoColors.white,
                                   filled: true,
                                   prefixIcon: const Padding(
                                     padding:
                                         EdgeInsets.only(left: 10, right: 10),
                                     child: Icon(
-                                      CupertinoIcons.person_alt,
+                                      CupertinoIcons.lock,
                                       color: cr_sec,
                                     ),
                                   ),
                                   border: norborder,
                                   enabledBorder: norborder,
                                   focusedBorder: fosborder,
-                                  hintText: 'Name',
+                                  hintText: '',
                                   hintStyle: hintstyle,
-                                  labelText: 'username'.toUpperCase(),
+                                  labelText: 'password'.toUpperCase(),
                                   labelStyle: hintstyle,
-                                ),
-                                style: TextStyle(
-                                  color: Colors.blue.withOpacity(0.8),
-                                ),
-                                keyboardType: TextInputType.name,
-                                onChanged: (text) {
-                                  vault.username = text;
-                                  //name = text;
-                                }),
-                            hspace(20),
-                            TextField(
-                                controller: sitecon,
-                                textCapitalization: TextCapitalization.none,
-                                decoration: InputDecoration(
-                                  fillColor: CupertinoColors.white,
-                                  filled: true,
-                                  prefixIcon: const Padding(
-                                    padding:
-                                        EdgeInsets.only(left: 10, right: 10),
-                                    child: Icon(
-                                      CupertinoIcons.personalhotspot,
-                                      color: cr_sec,
+                                  suffix: SizedBox(
+                                    height: 30,
+                                    child: IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          sho = !sho;
+                                        });
+                                      },
+                                      icon: Icon(
+                                        sho
+                                            ? FontAwesomeIcons.solidEye
+                                            : FontAwesomeIcons.eyeSlash,
+                                        color: cr_secac,
+                                      ),
                                     ),
+                                  )),
+                              obscureText: sho,
+                              style: TextStyle(
+                                color: cr_grey.withOpacity(0.8),
+                              ),
+                              keyboardType: TextInputType.name,
+                              onChanged: (text) {
+                                vault.password = text;
+                                //name = text;
+                              }),
+                          hspace(20),
+                          Row(
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  Clipboard.setData(
+                                    const ClipboardData(
+                                      text: '',
+                                    ),
+                                  );
+                                  passcon.text = '';
+                                  Fluttertoast.showToast(
+                                    msg: 'Password Copied to clipboard',
+                                  );
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: cr_pri,
+                                    borderRadius: BorderRadius.circular(8.r),
                                   ),
-                                  border: norborder,
-                                  enabledBorder: norborder,
-                                  focusedBorder: fosborder,
-                                  hintText: 'site',
-                                  hintStyle: hintstyle,
-                                  labelText: 'website'.toUpperCase(),
-                                  labelStyle: hintstyle,
-                                ),
-                                style: TextStyle(
-                                  color: Colors.blue.withOpacity(0.8),
-                                ),
-                                keyboardType: TextInputType.name,
-                                onChanged: (text) {
-                                  vault.site = text;
-                                }),
-                            hspace(20),
-                            TextField(
-                                textCapitalization: TextCapitalization.words,
-                                controller: passcon,
-                                decoration: InputDecoration(
-                                    fillColor: CupertinoColors.white,
-                                    filled: true,
-                                    prefixIcon: const Padding(
-                                      padding:
-                                          EdgeInsets.only(left: 10, right: 10),
-                                      child: Icon(
-                                        CupertinoIcons.lock,
-                                        color: cr_sec,
-                                      ),
-                                    ),
-                                    border: norborder,
-                                    enabledBorder: norborder,
-                                    focusedBorder: fosborder,
-                                    hintText: '',
-                                    hintStyle: hintstyle,
-                                    labelText: 'password'.toUpperCase(),
-                                    labelStyle: hintstyle,
-                                    suffix: SizedBox(
-                                      height: 30,
-                                      child: IconButton(
-                                        onPressed: () {
-                                          setState(() {
-                                            sho = !sho;
-                                          });
-                                        },
-                                        icon: Icon(
-                                          sho
-                                              ? FontAwesomeIcons.solidEye
-                                              : FontAwesomeIcons.eyeSlash,
-                                          color: cr_secac,
-                                        ),
-                                      ),
-                                    )),
-                                obscureText: sho,
-                                style: TextStyle(
-                                  color: cr_grey.withOpacity(0.8),
-                                ),
-                                keyboardType: TextInputType.name,
-                                onChanged: (text) {
-                                  vault.password = text;
-                                  //name = text;
-                                }),
-                            hspace(20),
-                            Row(
-                              children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(20),
-                                  child: InkWell(
-                                    onTap: () {
-                                      Clipboard.setData(
-                                        const ClipboardData(
-                                          text: '',
-                                        ),
-                                      );
-                                      passcon.text = '';
-                                      Fluttertoast.showToast(
-                                          msg: 'Password Copied to clipboard',);
-                                    },
-                                    child: Container(
-                                      width: 110,
-                                      height: 50,
-                                      color: cr_sec,
-                                      child: const Center(
-                                          child: Text(
-                                        'Generate',
-                                        style: TextStyle(
-                                            color: CupertinoColors.white,
-                                            fontSize: 18,
-                                            letterSpacing: 2),
-                                      )),
+                                  padding: EdgeInsets.symmetric(horizontal: 5.w,vertical: 5.h),
+                                  child: const Text(
+                                    'Generate',
+                                    style: TextStyle(
+                                      color: CupertinoColors.white,
+                                      fontSize: 18,
+                                      letterSpacing: 2,
                                     ),
                                   ),
                                 ),
-                                const Spacer(),
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(20),
-                                  child: InkWell(
-                                    onTap: () {
-                                      if (usercon.text.isEmpty ||
-                                          sitecon.text.isEmpty ||
-                                          passcon.text.isEmpty) {
-                                        Fluttertoast.showToast(
-                                          msg: 'Enter all detail',
-                                        );
-                                      } else {
-                                        if (edit) {
-                                          VaultHelper().editvault(vault);
-                                        } else {
-                                          VaultHelper().addvault(vault);
-                                        }
-                                        routename(context, '/');
-                                      }
-                                    },
-                                    child: Container(
-                                      width: 100,
-                                      height: 50,
-                                      color: cr_sec,
-                                      child: Center(
-                                        child: Text(
-                                          edit ? 'change' : 'Add',
-                                          style: const TextStyle(
-                                              color: CupertinoColors.white,
-                                              fontSize: 20,
-                                              letterSpacing: 2),
-                                        ),
-                                      ),
-                                    ),
+                              ),
+                              const Spacer(),
+                              InkWell(
+                                onTap: () {
+                                  if (usercon.text.isEmpty ||
+                                      sitecon.text.isEmpty ||
+                                      passcon.text.isEmpty) {
+                                    Fluttertoast.showToast(
+                                      msg: 'Enter all detail',
+                                    );
+                                  } else {
+                                    if (edit) {
+                                      VaultHelper().editvault(vault);
+                                    } else {
+                                      VaultHelper().addvault(vault);
+                                    }
+                                    routename(context, '/');
+                                  }
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(6.r),
+                                    color: cr_sec,
                                   ),
-                                )
-                              ],
-                            )
-                          ],
-                        ),
-                      )),
-                ),
+                                  padding: EdgeInsets.symmetric(horizontal: 8.w,vertical: 3.h),
+                                  child: Text(
+                                    edit ? 'change' : 'Add',
+                                    style: TextStyle(
+                                        color: CupertinoColors.white,
+                                        fontSize: 12.sp,
+                                        fontWeight: FontWeight.bold,
+                                        letterSpacing: 2),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                          hspace(10),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
