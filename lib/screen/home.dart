@@ -34,7 +34,6 @@ class _HomeState extends State<Home> {
       onWillPop: () async {
         SystemNavigator.pop();
         exit(0);
-        return true;
       },
       child: Scaffold(
         backgroundColor: cr_blk,
