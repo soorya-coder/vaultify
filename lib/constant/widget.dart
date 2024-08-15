@@ -798,7 +798,7 @@ class SimpleBtn1 extends StatelessWidget {
             alignment: Alignment.center,
             side: MaterialStateProperty.all(
                 BorderSide(width: 1, color: primaryColor)),
-            padding: MaterialStateProperty.all(
+            padding: WidgetStateProperty.all(
                 const EdgeInsets.only(right: 25, left: 25, top: 0, bottom: 0)),
             backgroundColor: WidgetStateProperty.all(
                 invertedColors ? accentColor : primaryColor),
