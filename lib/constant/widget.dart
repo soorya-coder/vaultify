@@ -802,7 +802,7 @@ class SimpleBtn1 extends StatelessWidget {
                 const EdgeInsets.only(right: 25, left: 25, top: 0, bottom: 0)),
             backgroundColor: MaterialStateProperty.all(
                 invertedColors ? accentColor : primaryColor),
-            shape: MaterialStateProperty.all(
+            shape: WidgetStateProperty.all(
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
             )),
         onPressed: onPressed,
